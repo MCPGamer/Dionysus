@@ -19,8 +19,8 @@
 			<ul class="nav navbar-nav mr-auto">
 				<li class="nav-item active"><a class="nav-link"
 					href="/searchMedia">Search Series or Movie</a></li>
-				<li class="nav-item "><a class="nav-link"
-					href="/dataTransfer">Export or Import XML</a></li>
+				<li class="nav-item "><a class="nav-link" href="/dataTransfer">Export
+						or Import XML</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -36,8 +36,8 @@
 					<div class="col-sm-4">
 						<select class="form-control" th:field="*{selectedMedia}"
 							id="media">
-							<option th:value=null>Select a Media</option>
-							<option th:each="media : *{storedMedia}" th:value="${media}"
+							<option th:value=0>Select a Media</option>
+							<option th:each="media : *{storedMedia}" th:value="${media.idDb}"
 								th:text="${media.title}"></option>
 						</select>
 					</div>

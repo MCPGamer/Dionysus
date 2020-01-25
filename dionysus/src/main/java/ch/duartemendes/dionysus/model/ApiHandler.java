@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -23,13 +24,17 @@ public class ApiHandler {
 	private static final String BASEURL = "https://api.thetvdb.com";
 	private static final String IMAGEURL = "https://artworks.thetvdb.com";
 	private String token;
+	
+	@Autowired
+	private MediaService mediaService;
 
 	@SuppressWarnings("unchecked")
 	public Media openMedia(SearchMediaContext context) {
 		Media result = null;
 
-		if (context.getSelectedMedia() != null) {
-			Media searchMedia = context.getSelectedMedia();
+		if (context.getSelectedMedia() != 0) {
+			long searchMediaId = context.getSelectedMedia();
+			Media searchMedia = mediaService.getMedia(searchMediaId);
 			MediaType searchType = searchMedia.getType();
 
 			if (searchType == null) {
@@ -81,10 +86,16 @@ public class ApiHandler {
 			result.setApiId(((Serie) result).getId());
 			result.setTitle(((Serie) result).getSeriesName());
 			result.setType(MediaType.Serie);
-			
-			((Serie) result).setFanart(IMAGEURL + "/banners/" + ((Serie) result).getFanart());
-			((Serie) result).setBanner(IMAGEURL + "/banners/" + ((Serie) result).getBanner());
-			((Serie) result).setPoster(IMAGEURL + "/banners/" + ((Serie) result).getPoster());
+
+			if (((Serie) result).getFanart() != null) {
+				((Serie) result).setFanart(IMAGEURL + "/banners/" + ((Serie) result).getFanart());
+			}
+			if (((Serie) result).getBanner() != null) {
+				((Serie) result).setBanner(IMAGEURL + "/banners/" + ((Serie) result).getBanner());
+			}
+			if (((Serie) result).getPoster() != null) {
+				((Serie) result).setPoster(IMAGEURL + "/banners/" + ((Serie) result).getPoster());
+			}
 		} else if (MediaType.Movie.equals(MediaType.Movie)) {
 			// TODO Search results for Movie
 		}
