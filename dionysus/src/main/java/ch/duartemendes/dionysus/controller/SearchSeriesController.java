@@ -34,7 +34,10 @@ public class SearchSeriesController {
 	@GetMapping("searchMedia")
 	private String getSearchSeriesMenu(Model model) {
 		mediaService.fillMediaFromDB();
-		searchContext.setStoredMedia(mediaService.getMediaList());
+		
+		if(searchContext != null) {
+			searchContext.setStoredMedia(mediaService.getMediaList());
+		}
 		
 		if (foundResults == null) {
 			searchContext = new SearchMediaContext(mediaService.getMediaList());
