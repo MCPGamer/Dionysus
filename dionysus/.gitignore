@@ -1,0 +1,31 @@
+dionysus/HELP.md
+dionysus/target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+
+### STS ###
+dionysus/.apt_generated
+dionysus/.classpath
+dionysus/.factorypath
+dionysus/.project
+dionysus/.settings
+dionysus/.springBeans
+dionysus/.sts4-cache
+
+### IntelliJ IDEA ###
+dionysus/.idea
+dionysus/*.iws
+dionysus/*.iml
+dionysus/*.ipr
+
+### NetBeans ###
+dionysus/nbproject/private/
+dionysus/nbbuild/
+dionysus/dist/
+dionysus/nbdist/
+dionysus/.nb-gradle/
+dionysus/build/
+
+### VS Code ###
+dionysus/.vscode/
