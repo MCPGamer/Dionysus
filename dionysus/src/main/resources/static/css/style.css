@@ -11,12 +11,79 @@ and open the template in the editor.
     box-sizing: border-box;
 }
 
+.search-results {
+	width: 80vw;
+	margin: 50px auto;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.search-result {
+	flex: 1;
+	width: 205px;
+	height: 300px;
+	margin: 30px;
+	position: relative;
+	transition: all .3s;
+}
+
+.search-result:hover {
+	transform: scale(1.2);
+	box-shadow: 5px 5px 10px rgba(0, 0, 0, 1);
+}
+
+.search-result img {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	border-radius: 3px;
+}
+
+.search-result button {
+	padding: 0;
+	background: none;
+	border: none;
+	outline: none;
+}
+
+.search-result > button > div {
+	opacity: 0;
+	position: absolute;
+	bottom: -1px;
+	padding: 0 10px 10px 10px;
+	transition: all .3s;
+	width: 100%;
+	min-height: 30%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	background-image: linear-gradient(to top, #000, #000A, transparent);
+}
+
+.search-result > button > div > div {
+	line-height: 30px;
+}
+
+.search-result img:hover + div, .search-result > button > div:hover {
+	opacity: 1;
+}
+
+.media-info__banner {
+	width: 70vw;
+	margin: 100px auto 30px auto;
+	display: block;
+	border-radius: 5px;
+	opacity: 0.9;
+}
+
 .media-info__wrapper {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 	max-width: 70vw;
-	margin: 100px auto;
+	margin: 30px auto 100px auto;
 }
 
 .media-info__wrapper > div {
