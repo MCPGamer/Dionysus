@@ -71,7 +71,7 @@ and open the template in the editor.
 }
 
 .media-info__banner {
-	width: 70vw;
+	width: 80vw;
 	margin: 100px auto 30px auto;
 	display: block;
 	border-radius: 5px;
@@ -82,7 +82,7 @@ and open the template in the editor.
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	max-width: 70vw;
+	max-width: 80vw;
 	margin: 30px auto 100px auto;
 }
 
@@ -142,7 +142,7 @@ and open the template in the editor.
 }
 
 .media-info__wrapper > div:last-of-type > div > div {
-	min-width: 70vw;
+	min-width: 80vw;
 	min-height: 150px;
 }
 
