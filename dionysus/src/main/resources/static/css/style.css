@@ -171,24 +171,33 @@ p {font-size: 16px;}
 }
 
 .navbar {
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding:5px;
-    border: 0;
+    border: none;
     border-radius: 0;
-    margin-bottom: 0;
     font-size: 24px;
-    letter-spacing: 5px;
+    box-shadow: 0 5px 10px -2px rgba(0, 0, 0, 1);
+    transition: all .2s;
 }
-.navbar-nav  li a:hover {
-    color: #1abc9c !important;
-}
-.navbar-header{
+
+.navbar-header {
     font-size: 30px;
     font-weight: bold;
     padding-right: 30px;
+    padding-left: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
-.dropdown-item{
-    padding-left: 3px;  
-    letter-spacing: 2px; 
+
+.nav-item a {
+	color: white;
+	padding-top: 17px !important;
+	transition: all .1s;
+}
+
+.nav-item a:hover {
+    color: #1abc9c !important;
+}
+
+.nav-item.active {
+	background-color: #222 !important;
+	border-bottom: 2px solid #1abc9c !important;
 }
