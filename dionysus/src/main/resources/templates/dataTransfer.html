@@ -22,7 +22,12 @@
 	</nav>
         <!--/.Navbar-->
         <div class="container-fluid  bg-4 text-center">
-			<!-- TODO -->
+			<form th:object="${xmlContent}" method="POST" action="#" th:action="@{/xmlUpload}">
+                <textarea th:field="*{xml}"></textarea><input type="submit" />
+            </form>
+            <form method="POST" action="#" th:action="@{/xmlExport}">
+                <input type="submit" />
+            </form>
 
         </div>
         <footer class="container-fluid bg-4 text-center">
