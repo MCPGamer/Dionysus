@@ -23,6 +23,7 @@ public class ApiHandler {
 	private static final String BASEURL = "https://api.thetvdb.com";
 	private String token;
 
+	@SuppressWarnings("unchecked")
 	public Media openMedia(SearchMediaContext context) {
 		Media result = null;
 
@@ -59,6 +60,7 @@ public class ApiHandler {
 		return result;
 	}
 
+	@SuppressWarnings("unchecked")
 	public ArrayList<Media> searchMedia(SearchMediaContext context) {
 		MediaType type = context.getSearchType();
 		String title = context.getSearchTitle();
@@ -96,6 +98,7 @@ public class ApiHandler {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void connect() {
 		try {
 			String url = BASEURL + "/login";
@@ -111,6 +114,7 @@ public class ApiHandler {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void refresh() {
 		try {
 			String url = BASEURL + "/refresh_token";
@@ -121,25 +125,35 @@ public class ApiHandler {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public String request(String url, HashMap<String,String>... additionalParams) {
 		RestTemplate rt = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 
+		headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
 		headers.setAccept(Arrays.asList(org.springframework.http.MediaType.APPLICATION_JSON));
 		headers.add("user-agent",
 				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
-		if(additionalParams[0] != null) {
+		
+		String json = "";
+		if(additionalParams != null && additionalParams.length > 0) {
+			json = "{";
 			for(String key : additionalParams[0].keySet()) {
-				headers.add(key, additionalParams[0].get(key));
+				json = json + '"' + key + '"' + ':' + '"' + additionalParams[0].get(key) + '"' + ',';
 			}
+			
+			json = json.substring(0, json.length() -1) + "}";
 		}
 		
+		ResponseEntity<String> res = null;
 		if(token != null) {
 			headers.setBearerAuth(token);
+			HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+			res = rt.exchange(url, HttpMethod.GET, entity, String.class);
+		} else {
+			HttpEntity<String> entity = new HttpEntity<String>(json, headers);
+			res = rt.exchange(url, HttpMethod.POST, entity, String.class);
 		}
-		
-		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-		ResponseEntity<String> res = rt.exchange(url, HttpMethod.GET, entity, String.class);
 
 		return res.getBody();
 	}
