@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ch.duartemendes.dionysus.model.ApiHandler;
 import ch.duartemendes.dionysus.model.Media;
 import ch.duartemendes.dionysus.model.MediaService;
+import ch.duartemendes.dionysus.model.MediaType;
 import ch.duartemendes.dionysus.model.SearchMediaContext;
+import ch.duartemendes.dionysus.model.Serie;
 
 /**
  * @author Duarte Goncalves Mendes
@@ -48,12 +50,23 @@ public class SearchSeriesController {
 		if (searchContext.getSelectedMedia() != null) {
 			Media foundMedia = apiHandler.openMedia(searchContext);
 			mediaService.addMedia(foundMedia);
-			// TODO: Redirect to info for Media
-			return "";
+			return openMedia(foundMedia, model);
 		} else {
 			foundResults = apiHandler.searchMedia(searchContext);
-			// TODO: Darstellung der Results
 			return getSearchSeriesMenu(model);
+		}
+	}
+	
+	@PostMapping("openMedia")
+	public String openMedia(@ModelAttribute Media media, Model model) {
+		if(MediaType.Movie.equals(media.getType())) {
+			// TODO Impl this
+			return "";
+		} else if(MediaType.Serie.equals(media.getType())) {
+			model.addAttribute("serie", (Serie) media);
+			return "showSerie.html";
+		} else {
+			return "";
 		}
 	}
 }
