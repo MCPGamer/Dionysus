@@ -25,41 +25,60 @@
 		</div>
 	</nav>
 	<!--/.Navbar-->
+	<div th:src="${banner}"/>
 	<div th:object="${serie}" class="media-info__wrapper">
 		<div>
 			<label>Name</label>
+			<hr>
 			<div>
-				<div th:text="*{seriesName}"></div>
-			</div>
-		</div>
-		<div>
-			<label>Aliases</label>
-			<div>
-				<div th:each="alias : *{aliases}" th:text="${alias}"></div>
+				<div>
+					<div th:text="*{seriesName}"></div>
+				</div>
 			</div>
 		</div>
 		<div>
 			<label>Status</label>
+			<hr/>
 			<div>
-				<div th:text="*{status}"></div>
+				<div>
+					<div th:text="*{status}"></div>
+				</div>
 			</div>
 		</div>
 		<div>
-			<label>Genres</label>
+			<label>Seasons</label>
+			<hr/>
 			<div>
-				<div th:each="gen : *{genre}" th:text="${gen}"></div>
-			</div>
-		</div>
-		<div>
-			<label>Season</label>
-			<div>
-				<div th:text="*{season}"></div>
+				<div>
+					<div th:text="*{season}"></div>
+				</div>
 			</div>
 		</div>
 		<div>
 			<label>Runtime</label>
+			<hr/>
 			<div>
-				<div th:text="*{runtime}"></div>
+				<div>
+					<div th:text="*{runtime}"></div>
+				</div>
+			</div>
+		</div>
+		<div>
+			<label>Aliases</label>
+			<hr/>
+			<div>
+				<div th:each="alias : *{aliases}">
+					<div th:text="${alias}"></div>
+				</div>
+			</div>
+		</div>
+		<div>
+			<label>Genres</label>
+			<hr/>
+			<div>
+				<div th:each="gen : *{genre}">
+					<div th:text="${gen}"></div>
+				</div>
 			</div>
 		</div>
 	</div>

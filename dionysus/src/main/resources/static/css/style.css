@@ -9,14 +9,13 @@ and open the template in the editor.
 */
 * {
     box-sizing: border-box;
-    border: thin solid red;
 }
 
 .media-info__wrapper {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	max-width: 80vw;
+	max-width: 70vw;
 	margin: 100px auto;
 }
 
@@ -24,20 +23,51 @@ and open the template in the editor.
 	flex: 1;
 	display: flex;
 	flex-direction: column;
+	margin-bottom: 20px;
 }
 
 .media-info__wrapper > div > label {
- 	flex: 1;
+ 	text-align: center;
+ 	height: 20px;
+}
+
+.media-info__wrapper > div > hr {
+ 	width: 80%;
+ 	color: white;
 }
 
 .media-info__wrapper > div > div {
 	flex: 1;
 	display: flex;
 	flex-direction: row;
+	justify-content: center;
 }
 
 .media-info__wrapper > div > div > div {
-	flex: 1;
+	width: 150px;
+	min-height: 150px;
+	border-radius: 5px;
+	box-shadow: 5px 5px 10px -1px rgba(0, 0, 0, 1);
+	margin: 10px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	text-align: center;
+	transition: all .2s;
+}
+
+.media-info__wrapper > div > div > div:hover {
+	box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 1);
+	background-color: #3c3c3c;
+}
+
+.media-info__wrapper > div > div > div > div {
+	transform: translateY(-5px);
+	padding: 10px;
+}
+
+.media-info__wrapper > div:nth-child(4) > div > div > div::after {
+	content: " min per episode";
 }
 
 body {
