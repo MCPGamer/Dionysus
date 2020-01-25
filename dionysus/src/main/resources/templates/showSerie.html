@@ -25,7 +25,9 @@
 		</div>
 	</nav>
 	<!--/.Navbar-->
-	<div th:src="${serie.banner}"/>
+	<img th:src="${serie.banner}"/>
+	<img th:src="${serie.poster}"/>
+	<img th:src="${serie.fanart}"/>
 	<div th:object="${serie}" class="media-info__wrapper">
 		<div>
 			<label>Name</label>

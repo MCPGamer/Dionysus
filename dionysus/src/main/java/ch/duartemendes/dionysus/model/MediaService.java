@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.jdom2.Namespace;
 import org.jdom2.output.XMLOutputter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

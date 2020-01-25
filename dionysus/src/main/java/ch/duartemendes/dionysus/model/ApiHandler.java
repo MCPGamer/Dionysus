@@ -81,6 +81,10 @@ public class ApiHandler {
 			result.setApiId(((Serie) result).getId());
 			result.setTitle(((Serie) result).getSeriesName());
 			result.setType(MediaType.Serie);
+			
+			((Serie) result).setFanart(IMAGEURL + "/banners/" + ((Serie) result).getFanart());
+			((Serie) result).setBanner(IMAGEURL + "/banners/" + ((Serie) result).getBanner());
+			((Serie) result).setPoster(IMAGEURL + "/banners/" + ((Serie) result).getPoster());
 		} else if (MediaType.Movie.equals(MediaType.Movie)) {
 			// TODO Search results for Movie
 		}
@@ -112,9 +116,6 @@ public class ApiHandler {
 
 				Serie serie = gson.fromJson(foundSeriesJson, Serie.class);
 				serie.setImage(IMAGEURL + serie.getImage());
-				serie.setFanart(IMAGEURL + serie.getFanart());
-				serie.setBanner(IMAGEURL + serie.getBanner());
-				serie.setPoster(IMAGEURL + serie.getPoster());
 
 				results.add(serie);
 			}
