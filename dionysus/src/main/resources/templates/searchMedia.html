@@ -80,6 +80,15 @@
 							<input type="hidden" name="id" th:value="${media.id}" />
 						</button>
 					</div>
+					<div th:if="${media instanceof T(ch.duartemendes.dionysus.model.Movie)}" class="search-result">
+						<button type="submit">
+							<img th:src="${media.image}"/>
+							<div>
+								<div th:text="${media.title}"/>
+							</div>
+							<input type="hidden" name="id" th:value="${media.id}" />
+						</button>
+					</div>
 				</form>
 			</th:block>
 		</div>

@@ -1,6 +1,10 @@
 package ch.duartemendes.dionysus.model;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -138,25 +142,37 @@ public class ApiHandler {
 			}
 		} else if (MediaType.Movie.equals(type)) {
 			try {
-				Document doc = Jsoup.connect(MOVIESEARCHURL + title).get();
+				String url = MOVIESEARCHURL + title;
+				StringBuilder result = new StringBuilder();
+				URL url2 = new URL(url);
+				HttpURLConnection conn = (HttpURLConnection) url2.openConnection();
+				conn.setRequestMethod("GET");
+				BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				String line;
+				while ((line = rd.readLine()) != null) {
+					result.append(line);
+				}
+				rd.close();
+
+				Document doc = Jsoup.parse(result.toString());
 				Elements foundMedias = doc.select(".media");
 
 				for (Element media : foundMedias) {
 					Movie movie = new Movie();
-					
+
 					Element imageDiv = media.selectFirst(".media-object");
 					movie.setImage(imageDiv.attr("src"));
-					
+
 					Element titleDiv = media.selectFirst(".media-heading");
 					movie.setTitle(titleDiv.text());
-					
+
 					Element idDiv = media.selectFirst(".media-body").selectFirst(".text-muted");
 					String parseId = idDiv.text();
 					movie.setId(Long.valueOf(parseId.substring(parseId.indexOf('#'), parseId.length())));
-					
+
 					results.add(movie);
 				}
-			} catch (IOException e) {
+			} catch (Exception e) {
 			}
 		}
 

@@ -1,14 +1,15 @@
 package ch.duartemendes.dionysus.controller;
 
-import ch.duartemendes.dionysus.model.XMLContent;
-import org.json.XML;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import ch.duartemendes.dionysus.model.ApiHandler;
 import ch.duartemendes.dionysus.model.MediaService;
+import ch.duartemendes.dionysus.model.XMLContent;
 
 /**
  * @author Duarte Goncalves Mendes
@@ -35,7 +36,7 @@ public class DataTransferController {
 		} else {
 			model.addAttribute("xmlerror", "doesnt have dataTransfer.xsd");
 			model.addAttribute("xml", "");
-			return "dataTransfer.html";
+			return getDataTransferRoot(model);
 		}
 	}
 

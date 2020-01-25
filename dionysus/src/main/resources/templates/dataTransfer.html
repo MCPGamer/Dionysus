@@ -22,11 +22,14 @@
 	</nav>
         <!--/.Navbar-->
         <div class="container-fluid  bg-4 text-center">
+        	<p style="color:red" th:text="${xmlerror}"></p>
 			<form th:object="${xmlContent}" method="POST" action="#" th:action="@{/xmlUpload}">
-                <textarea th:field="*{xml}"></textarea><input type="submit" />
+                <textarea style="color:black;"  rows="20" cols="150" th:field="*{xml}"></textarea>
+                <br/>
+                <input type="submit" value="Import" class="btn btn-info"/>
             </form>
             <form method="POST" action="#" th:action="@{/xmlExport}">
-                <input type="submit" />
+                <input type="submit" value="Export" class="btn btn-info"/>
             </form>
 
         </div>
