@@ -7,6 +7,39 @@ and open the template in the editor.
     Created on : 18.09.2019, 14:49:49
     Author     : Your Name <your.name at your.org>
 */
+* {
+    box-sizing: border-box;
+    border: thin solid red;
+}
+
+.media-info__wrapper {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	max-width: 80vw;
+	margin: 100px auto;
+}
+
+.media-info__wrapper > div {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.media-info__wrapper > div > label {
+ 	flex: 1;
+}
+
+.media-info__wrapper > div > div {
+	flex: 1;
+	display: flex;
+	flex-direction: row;
+}
+
+.media-info__wrapper > div > div > div {
+	flex: 1;
+}
+
 body {
     font: 20px Montserrat, sans-serif;
     line-height: 1.8;
@@ -30,11 +63,7 @@ p {font-size: 16px;}
     background-color: #2f2f2f; /* Black Gray */
     color: #fff;
 }
-.container-fluid {
-    padding-top: 70px;
-    padding-bottom: 70px;
-    padding: 70px;
-}
+
 .navbar {
     padding-top: 5px;
     padding-bottom: 5px;
