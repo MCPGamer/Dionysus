@@ -39,7 +39,7 @@ public class SearchSeriesController {
 			searchContext.setStoredMedia(mediaService.getMediaList());
 		}
 		
-		if (foundResults == null) {
+		if (foundResults == null || foundResults.isEmpty()) {
 			searchContext = new SearchMediaContext(mediaService.getMediaList());
 		} else {
 			model.addAttribute("foundResults", foundResults);
