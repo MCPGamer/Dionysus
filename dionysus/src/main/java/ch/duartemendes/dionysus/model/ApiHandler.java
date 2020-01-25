@@ -21,6 +21,7 @@ public class ApiHandler {
 	private static final String USERKEY = "5E2B1667BC66B6.97262084";
 	private static final String USERNAME = "MCPGamer";
 	private static final String BASEURL = "https://api.thetvdb.com";
+	private static final String IMAGEURL = "https://artworks.thetvdb.com";
 	private String token;
 
 	@SuppressWarnings("unchecked")
@@ -81,7 +82,11 @@ public class ApiHandler {
 				
 				String foundSeriesJson = foundSeries.toString();
 				Gson gson = new Gson();
-				results.add(gson.fromJson(foundSeriesJson, Serie.class));
+
+				Serie serie = gson.fromJson(foundSeriesJson, Serie.class);
+				serie.setImage(IMAGEURL +serie.getImage());
+
+				results.add(serie);
 			}
 		} else if (MediaType.Movie.equals(type)) {
 			//TODO Search results for Movie (maybe this will be HTML)

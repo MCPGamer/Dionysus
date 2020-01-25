@@ -26,22 +26,25 @@ public class SearchSeriesController {
 	private ApiHandler apiHandler;
 
 	private ArrayList<Media> foundResults = null;
+	private SearchMediaContext searchContext = null;
 
 	@GetMapping("searchMedia")
 	private String getSearchSeriesMenu(Model model) {
 		mediaService.fillMediaFromDB();
 
 		if (foundResults == null) {
-			model.addAttribute("searchContext", new SearchMediaContext(mediaService.getMediaList()));
+			searchContext = new SearchMediaContext(mediaService.getMediaList());
 		} else {
 			model.addAttribute("foundResults", foundResults);
 		}
+		model.addAttribute("searchContext", searchContext);
 
 		return "searchMedia.html";
 	}
 
 	@PostMapping("searchMedia")
 	public String searchMedia(@ModelAttribute SearchMediaContext searchContext, Model model) {
+		this.searchContext = searchContext;
 		if (searchContext.getSelectedMedia() != null) {
 			Media foundMedia = apiHandler.openMedia(searchContext);
 			mediaService.addMedia(foundMedia);
@@ -49,7 +52,6 @@ public class SearchSeriesController {
 			return "";
 		} else {
 			foundResults = apiHandler.searchMedia(searchContext);
-			model.addAttribute("searchContext", searchContext);
 			// TODO: Darstellung der Results
 			return getSearchSeriesMenu(model);
 		}
