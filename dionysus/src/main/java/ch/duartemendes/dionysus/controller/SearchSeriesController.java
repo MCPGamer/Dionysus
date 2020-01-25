@@ -52,10 +52,10 @@ public class SearchSeriesController {
 	@PostMapping("searchMedia")
 	public String searchMedia(@ModelAttribute SearchMediaContext searchContext, Model model) {
 		this.searchContext = searchContext;
-		if (searchContext.getSelectedMedia() != null) {
+		if (searchContext.getSelectedMedia() != 0) {
 			Media foundMedia = apiHandler.openMedia(searchContext);
 			mediaService.addMedia(foundMedia);
-			return openMedia(foundMedia.getIdDb(), model);
+			return openMedia(foundMedia.getApiId(), model);
 		} else {
 			foundResults = apiHandler.searchMedia(searchContext);
 			return getSearchSeriesMenu(model);

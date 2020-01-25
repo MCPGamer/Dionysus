@@ -9,14 +9,14 @@ import java.util.Collections;
  */
 public class SearchMediaContext {
 	private ArrayList<Media> storedMedia;
-	private Media selectedMedia;
+	private long selectedMedia;
 	private String searchTitle;
 	private ArrayList<MediaType> mediaTypes;
 	private MediaType searchType;
 
 	public SearchMediaContext(ArrayList<Media> storedMedia) {
 		this.storedMedia = storedMedia;
-		selectedMedia = null;
+		selectedMedia = 0;
 		searchTitle = "";
 		mediaTypes = new ArrayList<>();
 		Collections.addAll(mediaTypes, MediaType.values());
@@ -31,11 +31,11 @@ public class SearchMediaContext {
 		this.storedMedia = storedMedia;
 	}
 
-	public Media getSelectedMedia() {
+	public long getSelectedMedia() {
 		return selectedMedia;
 	}
 
-	public void setSelectedMedia(Media selectedMedia) {
+	public void setSelectedMedia(long selectedMedia) {
 		this.selectedMedia = selectedMedia;
 	}
 
