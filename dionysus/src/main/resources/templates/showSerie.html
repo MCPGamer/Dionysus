@@ -24,6 +24,32 @@
 	</nav>
 	<!--/.Navbar-->
 	<div class="container-fluid  bg-4 text-center">
+		<table th:object="${serie}">
+			<tr>
+				<th>Name</th>
+				<td th:text="*{seriesName}"></td>
+			</tr>
+			<tr>
+				<th>Aliases</th>
+				<td><ul th:each="alias : *{aliases}"><li th:text="${alias}"></li></ul></td>
+			</tr>
+			<tr>
+				<th>Status</th>
+				<td th:text="*{status}"></td>
+			</tr>
+			<tr>
+				<th>Genres</th>
+				<td><ul th:each="gen : *{genre}"><li th:text="${gen}"></li></ul></td>
+			</tr>
+			<tr>
+				<th>Season</th>
+				<td th:text="*{season}"></td>
+			</tr>
+			<tr>
+				<th>Runtime</th>
+				<td th:text="*{runtime}"></td>
+			</tr>
+		</table>
 		<!-- TODO: Impl. this -->>
 	</div>
 	<footer class="container-fluid bg-4 text-center">

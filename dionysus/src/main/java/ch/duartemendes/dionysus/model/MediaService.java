@@ -35,7 +35,7 @@ public class MediaService {
     }
 
     public void addMedia(Media media){
-    	repository.save(media);
+    	//repository.save(media);
         this.mediaList.add(media);
     }
 
