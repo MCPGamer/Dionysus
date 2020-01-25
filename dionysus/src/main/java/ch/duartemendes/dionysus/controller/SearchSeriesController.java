@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import ch.duartemendes.dionysus.model.ApiHandler;
 import ch.duartemendes.dionysus.model.Media;
@@ -50,20 +51,23 @@ public class SearchSeriesController {
 		if (searchContext.getSelectedMedia() != null) {
 			Media foundMedia = apiHandler.openMedia(searchContext);
 			mediaService.addMedia(foundMedia);
-			return openMedia(foundMedia, model);
+			return openMedia(foundMedia.getIdDb(), model);
 		} else {
 			foundResults = apiHandler.searchMedia(searchContext);
 			return getSearchSeriesMenu(model);
 		}
 	}
 	
-	@PostMapping("openMedia")
-	public String openMedia(@ModelAttribute Media media, Model model) {
-		if(MediaType.Movie.equals(media.getType())) {
+	@GetMapping("openMedia")
+	public String openMedia(@RequestParam long id, Model model) {
+		Media foundMedia = apiHandler.openMedia(id);
+		mediaService.addMedia(foundMedia);
+		
+		if(MediaType.Movie.equals(foundMedia.getType())) {
 			// TODO Impl this
 			return "";
-		} else if(MediaType.Serie.equals(media.getType())) {
-			model.addAttribute("serie", (Serie) media);
+		} else if(MediaType.Serie.equals(foundMedia.getType())) {
+			model.addAttribute("serie", (Serie) foundMedia);
 			return "showSerie.html";
 		} else {
 			return "";

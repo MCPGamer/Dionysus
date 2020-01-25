@@ -64,16 +64,16 @@
 				</div>
 			</div>
 
-			<button type="submit" class="btn btn-info">Suchen</button>
+			<button type="submit" class="btn btn-info">Search</button>
 		</form>
 		<table align="center" style="border: 1px solid white">
 			<th:block th:each="media : ${foundResults}">
 				<form class="form-horizontal" action="#" th:action="@{/openMedia}"
-					th:object="${media}" method="post">
+					th:object="${media}" method="get">
 						<tr th:if="${media instanceof T(ch.duartemendes.dionysus.model.Serie)}">
-							<td style="border-bottom: 1px solid white; border-right: 1px solid white" colspan="2"><img th:src="${media.image}"> <img/></td>
+							<td style="border-bottom: 1px solid white; border-right: 1px solid white" colspan="2"><img style="width:20%" th:src="${media.image}"> <img/></td>
 							<td style="border-bottom: 1px solid white" colspan="2" th:text="${media.seriesName}">...</td>
-							<td style="border-bottom: 1px solid white" colspan="1"><button type="submit" class="btn btn-info">Infos</button></td>
+							<td style="border-bottom: 1px solid white" colspan="1"><input type="hidden" name="id" th:value="${media.id}"><button type="submit" class="btn btn-info">Infos</button></td>
 						</tr>
 				</form>
 			</th:block>

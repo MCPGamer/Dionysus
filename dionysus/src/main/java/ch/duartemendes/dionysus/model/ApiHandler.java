@@ -38,14 +38,14 @@ public class ApiHandler {
 			}
 
 			checkConnection();
-			
-			if(MediaType.Serie.equals(MediaType.Serie)) {
+
+			if (MediaType.Serie.equals(MediaType.Serie)) {
 				String url = BASEURL + "/series/" + searchMedia.getApiId();
 				String json = request(url);
-				
+
 				JSONObject jsonObj = new JSONObject(json);
 				JSONObject foundSeries = jsonObj.getJSONObject("data");
-					
+
 				String foundSeriesJson = foundSeries.toString();
 				Gson gson = new Gson();
 				result = gson.fromJson(foundSeriesJson, Serie.class);
@@ -54,8 +54,35 @@ public class ApiHandler {
 				result.setTitle(((Serie) result).getSeriesName());
 				result.setType(MediaType.Serie);
 			} else if (MediaType.Movie.equals(MediaType.Movie)) {
-				//TODO Search results for Movie 
+				// TODO Search results for Movie
 			}
+		}
+
+		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	public Media openMedia(long id) {
+		Media result = null;
+
+		checkConnection();
+
+		if (MediaType.Serie.equals(MediaType.Serie)) {
+			String url = BASEURL + "/series/" + id;
+			String json = request(url);
+
+			JSONObject jsonObj = new JSONObject(json);
+			JSONObject foundSeries = jsonObj.getJSONObject("data");
+
+			String foundSeriesJson = foundSeries.toString();
+			Gson gson = new Gson();
+			result = gson.fromJson(foundSeriesJson, Serie.class);
+
+			result.setApiId(((Serie) result).getId());
+			result.setTitle(((Serie) result).getSeriesName());
+			result.setType(MediaType.Serie);
+		} else if (MediaType.Movie.equals(MediaType.Movie)) {
+			// TODO Search results for Movie
 		}
 
 		return result;
@@ -69,27 +96,30 @@ public class ApiHandler {
 		checkConnection();
 
 		ArrayList<Media> results = new ArrayList<>();
-		
-		if(MediaType.Serie.equals(type)) {
+
+		if (MediaType.Serie.equals(type)) {
 			String url = BASEURL + "/search/series?name=" + title;
 			String result = request(url);
-			
+
 			JSONObject jsonObj = new JSONObject(result);
 			JSONArray dataArray = jsonObj.getJSONArray("data");
-			
-			for(int i = 0; i < dataArray.length(); i++) {
+
+			for (int i = 0; i < dataArray.length(); i++) {
 				JSONObject foundSeries = dataArray.getJSONObject(i);
-				
+
 				String foundSeriesJson = foundSeries.toString();
 				Gson gson = new Gson();
 
 				Serie serie = gson.fromJson(foundSeriesJson, Serie.class);
-				serie.setImage(IMAGEURL +serie.getImage());
+				serie.setImage(IMAGEURL + serie.getImage());
+				serie.setFanart(IMAGEURL + serie.getFanart());
+				serie.setBanner(IMAGEURL + serie.getBanner());
+				serie.setPoster(IMAGEURL + serie.getPoster());
 
 				results.add(serie);
 			}
 		} else if (MediaType.Movie.equals(type)) {
-			//TODO Search results for Movie (maybe this will be HTML)
+			// TODO Search results for Movie (maybe this will be HTML)
 		}
 
 		return results;
@@ -131,7 +161,7 @@ public class ApiHandler {
 	}
 
 	@SuppressWarnings("unchecked")
-	public String request(String url, HashMap<String,String>... additionalParams) {
+	public String request(String url, HashMap<String, String>... additionalParams) {
 		RestTemplate rt = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 
@@ -139,19 +169,19 @@ public class ApiHandler {
 		headers.setAccept(Arrays.asList(org.springframework.http.MediaType.APPLICATION_JSON));
 		headers.add("user-agent",
 				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
-		
+
 		String json = "";
-		if(additionalParams != null && additionalParams.length > 0) {
+		if (additionalParams != null && additionalParams.length > 0) {
 			json = "{";
-			for(String key : additionalParams[0].keySet()) {
+			for (String key : additionalParams[0].keySet()) {
 				json = json + '"' + key + '"' + ':' + '"' + additionalParams[0].get(key) + '"' + ',';
 			}
-			
-			json = json.substring(0, json.length() -1) + "}";
+
+			json = json.substring(0, json.length() - 1) + "}";
 		}
-		
+
 		ResponseEntity<String> res = null;
-		if(token != null) {
+		if (token != null) {
 			headers.setBearerAuth(token);
 			HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
 			res = rt.exchange(url, HttpMethod.GET, entity, String.class);

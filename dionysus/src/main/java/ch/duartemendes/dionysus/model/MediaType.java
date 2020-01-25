@@ -5,4 +5,14 @@ package ch.duartemendes.dionysus.model;
  */
 public enum MediaType {
 	Movie, Serie;
+	
+	public static MediaType lookupByName(String name) {
+		for(MediaType type : MediaType.values()) {
+			if(type.name().equals(name)) {
+				return type;
+			}
+		}
+		
+		return null;
+	}
 }

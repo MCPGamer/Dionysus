@@ -8,7 +8,7 @@ public class Serie extends Media {
 	private String[] aliases;
 	private String banner;
 	private String firstAired;
-	private int id;
+	private long id;
 	private String image;
 	private String network;
 	private String overview;
@@ -114,11 +114,11 @@ public class Serie extends Media {
 		this.status = status;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

@@ -12,17 +12,17 @@ import javax.persistence.Id;
 @Entity
 public class Media {
 	@Id
-	private int idDb;
+	private long idDb;
 	@Enumerated(EnumType.STRING)
 	private MediaType type;
-	private int apiId;
+	private long apiId;
 	private String title;
 
-	public int getIdDb() {
+	public long getIdDb() {
 		return idDb;
 	}
 
-	public void setIdDb(int idDb) {
+	public void setIdDb(long idDb) {
 		this.idDb = idDb;
 	}
 
@@ -34,11 +34,11 @@ public class Media {
 		this.type = type;
 	}
 
-	public int getApiId() {
+	public long getApiId() {
 		return apiId;
 	}
 
-	public void setApiId(int apiId) {
+	public void setApiId(long apiId) {
 		this.apiId = apiId;
 	}
 
