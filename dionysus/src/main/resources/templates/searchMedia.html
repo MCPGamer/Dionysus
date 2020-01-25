@@ -19,6 +19,8 @@
 			<ul class="nav navbar-nav mr-auto">
 				<li class="nav-item active"><a class="nav-link"
 					href="/searchMedia">Search Series or Movie</a></li>
+				<li class="nav-item "><a class="nav-link"
+					href="/dataTransfer">Export or Import XML</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -70,11 +72,18 @@
 			<th:block th:each="media : ${foundResults}">
 				<form class="form-horizontal" action="#" th:action="@{/openMedia}"
 					th:object="${media}" method="get">
-						<tr th:if="${media instanceof T(ch.duartemendes.dionysus.model.Serie)}">
-							<td style="border-bottom: 1px solid white; border-right: 1px solid white" colspan="2"><img style="width:20%" th:src="${media.image}"> <img/></td>
-							<td style="border-bottom: 1px solid white" colspan="2" th:text="${media.seriesName}">...</td>
-							<td style="border-bottom: 1px solid white" colspan="1"><input type="hidden" name="id" th:value="${media.id}"><button type="submit" class="btn btn-info">Infos</button></td>
-						</tr>
+					<tr
+						th:if="${media instanceof T(ch.duartemendes.dionysus.model.Serie)}">
+						<td
+							style="border-bottom: 1px solid white; border-right: 1px solid white"
+							colspan="2"><img style="width: 20%" th:src="${media.image}">
+							<img /></td>
+						<td style="border-bottom: 1px solid white" colspan="2"
+							th:text="${media.seriesName}">...</td>
+						<td style="border-bottom: 1px solid white" colspan="1"><input
+							type="hidden" name="id" th:value="${media.id}">
+						<button type="submit" class="btn btn-info">Infos</button></td>
+					</tr>
 				</form>
 			</th:block>
 		</table>
