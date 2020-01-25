@@ -130,11 +130,20 @@ and open the template in the editor.
 
 .media-info__wrapper > div > div > div > div {
 	transform: translateY(-5px);
-	padding: 10px;
+	padding: 20px;
 }
 
 .media-info__wrapper > div:nth-child(4) > div > div > div::after {
 	content: " min per episode";
+}
+
+.media-info__wrapper > div:nth-child(5) > div > div > div::after {
+	content: "/10";
+}
+
+.media-info__wrapper > div:last-child > div > div {
+	min-width: 70vw;
+	min-height: 150px;
 }
 
 body {

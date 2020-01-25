@@ -64,6 +64,15 @@
 			</div>
 		</div>
 		<div>
+			<label>Rating</label>
+			<hr/>
+			<div>
+				<div>
+					<div th:text="*{siteRating}"></div>
+				</div>
+			</div>
+		</div>
+		<div>
 			<label>Aliases</label>
 			<hr/>
 			<div>
@@ -78,6 +87,15 @@
 			<div>
 				<div th:each="gen : *{genre}">
 					<div th:text="${gen}"></div>
+				</div>
+			</div>
+		</div>
+		<div>
+			<label>Overview</label>
+			<hr/>
+			<div>
+				<div>
+					<div th:text="*{overview}"></div>
 				</div>
 			</div>
 		</div>
