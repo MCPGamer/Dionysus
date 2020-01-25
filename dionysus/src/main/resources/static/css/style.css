@@ -111,7 +111,7 @@ and open the template in the editor.
 }
 
 .media-info__wrapper > div > div > div {
-	width: 150px;
+	min-width: 150px;
 	min-height: 150px;
 	border-radius: 5px;
 	box-shadow: 5px 5px 10px -1px rgba(0, 0, 0, 1);
@@ -134,14 +134,14 @@ and open the template in the editor.
 }
 
 .media-info__wrapper > div:nth-child(4) > div > div > div::after {
-	content: " min per episode";
+	content: " min / episode";
 }
 
 .media-info__wrapper > div:nth-child(5) > div > div > div::after {
-	content: "/10";
+	content: " / 10";
 }
 
-.media-info__wrapper > div:last-child > div > div {
+.media-info__wrapper > div:last-of-type > div > div {
 	min-width: 70vw;
 	min-height: 150px;
 }
