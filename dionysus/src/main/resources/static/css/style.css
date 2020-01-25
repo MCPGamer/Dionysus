@@ -141,7 +141,7 @@ and open the template in the editor.
 	content: " / 10";
 }
 
-.media-info__wrapper > div:last-child > div > div {
+.media-info__wrapper > div:last-of-type > div > div {
 	min-width: 70vw;
 	min-height: 150px;
 }
