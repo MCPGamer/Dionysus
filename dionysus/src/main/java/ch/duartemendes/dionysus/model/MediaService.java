@@ -35,8 +35,13 @@ public class MediaService {
     }
 
     public void addMedia(Media media){
-    	//repository.save(media);
-        this.mediaList.add(media);
+    	Media persistMedia = new Media();
+    	persistMedia.setApiId(media.getApiId());
+    	persistMedia.setTitle(media.getTitle());
+    	persistMedia.setType(media.getType());
+    	
+    	repository.save(persistMedia);
+        this.mediaList.add(persistMedia);
     }
 
     public ArrayList<Media> getMediaList() {
