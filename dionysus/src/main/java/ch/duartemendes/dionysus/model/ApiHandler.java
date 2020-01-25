@@ -1,11 +1,16 @@
 package ch.duartemendes.dionysus.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -23,8 +28,9 @@ public class ApiHandler {
 	private static final String USERNAME = "MCPGamer";
 	private static final String BASEURL = "https://api.thetvdb.com";
 	private static final String IMAGEURL = "https://artworks.thetvdb.com";
+	private static final String MOVIESEARCHURL = "https://thetvdb.com/search?menu[type]=Movie&query=";
 	private String token;
-	
+
 	@Autowired
 	private MediaService mediaService;
 
@@ -46,7 +52,7 @@ public class ApiHandler {
 
 			if (MediaType.Serie.equals(MediaType.Serie)) {
 				String url = BASEURL + "/series/" + searchMedia.getApiId();
-				String json = request(url);
+				String json = request(url, true);
 
 				JSONObject jsonObj = new JSONObject(json);
 				JSONObject foundSeries = jsonObj.getJSONObject("data");
@@ -74,7 +80,7 @@ public class ApiHandler {
 
 		if (MediaType.Serie.equals(MediaType.Serie)) {
 			String url = BASEURL + "/series/" + id;
-			String json = request(url);
+			String json = request(url, true);
 
 			JSONObject jsonObj = new JSONObject(json);
 			JSONObject foundSeries = jsonObj.getJSONObject("data");
@@ -87,13 +93,13 @@ public class ApiHandler {
 			result.setTitle(((Serie) result).getSeriesName());
 			result.setType(MediaType.Serie);
 
-			if (((Serie) result).getFanart() != null) {
+			if (((Serie) result).getFanart() != null && !((Serie) result).getFanart().isEmpty()) {
 				((Serie) result).setFanart(IMAGEURL + "/banners/" + ((Serie) result).getFanart());
 			}
-			if (((Serie) result).getBanner() != null) {
+			if (((Serie) result).getBanner() != null && !((Serie) result).getBanner().isEmpty()) {
 				((Serie) result).setBanner(IMAGEURL + "/banners/" + ((Serie) result).getBanner());
 			}
-			if (((Serie) result).getPoster() != null) {
+			if (((Serie) result).getPoster() != null && !((Serie) result).getPoster().isEmpty()) {
 				((Serie) result).setPoster(IMAGEURL + "/banners/" + ((Serie) result).getPoster());
 			}
 		} else if (MediaType.Movie.equals(MediaType.Movie)) {
@@ -114,7 +120,7 @@ public class ApiHandler {
 
 		if (MediaType.Serie.equals(type)) {
 			String url = BASEURL + "/search/series?name=" + title;
-			String result = request(url);
+			String result = request(url, true);
 
 			JSONObject jsonObj = new JSONObject(result);
 			JSONArray dataArray = jsonObj.getJSONArray("data");
@@ -131,7 +137,27 @@ public class ApiHandler {
 				results.add(serie);
 			}
 		} else if (MediaType.Movie.equals(type)) {
-			// TODO Search results for Movie (maybe this will be HTML)
+			try {
+				Document doc = Jsoup.connect(MOVIESEARCHURL + title).get();
+				Elements foundMedias = doc.select(".media");
+
+				for (Element media : foundMedias) {
+					Movie movie = new Movie();
+					
+					Element imageDiv = media.selectFirst(".media-object");
+					movie.setImage(imageDiv.attr("src"));
+					
+					Element titleDiv = media.selectFirst(".media-heading");
+					movie.setTitle(titleDiv.text());
+					
+					Element idDiv = media.selectFirst(".media-body").selectFirst(".text-muted");
+					String parseId = idDiv.text();
+					movie.setId(Long.valueOf(parseId.substring(parseId.indexOf('#'), parseId.length())));
+					
+					results.add(movie);
+				}
+			} catch (IOException e) {
+			}
 		}
 
 		return results;
@@ -153,7 +179,7 @@ public class ApiHandler {
 			params.put("apikey", APIKEY);
 			params.put("userkey", USERKEY);
 			params.put("username", USERNAME);
-			String result = request(url, params);
+			String result = request(url, true, params);
 
 			JSONObject jsonObj = new JSONObject(result);
 			token = jsonObj.getString("token");
@@ -165,7 +191,7 @@ public class ApiHandler {
 	private void refresh() {
 		try {
 			String url = BASEURL + "/refresh_token";
-			String result = request(url);
+			String result = request(url, true);
 			JSONObject jsonObj = new JSONObject(result);
 			token = jsonObj.getString("token");
 		} catch (Exception e) {
@@ -173,12 +199,14 @@ public class ApiHandler {
 	}
 
 	@SuppressWarnings("unchecked")
-	public String request(String url, HashMap<String, String>... additionalParams) {
+	public String request(String url, Boolean isJson, HashMap<String, String>... additionalParams) {
 		RestTemplate rt = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 
-		headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
-		headers.setAccept(Arrays.asList(org.springframework.http.MediaType.APPLICATION_JSON));
+		if (isJson) {
+			headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
+			headers.setAccept(Arrays.asList(org.springframework.http.MediaType.APPLICATION_JSON));
+		}
 		headers.add("user-agent",
 				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
 
