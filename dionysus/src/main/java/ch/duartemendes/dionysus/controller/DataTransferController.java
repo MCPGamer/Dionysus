@@ -1,7 +1,11 @@
 package ch.duartemendes.dionysus.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import ch.duartemendes.dionysus.model.ApiHandler;
+import ch.duartemendes.dionysus.model.MediaService;
 
 /**
  * @author Duarte Goncalves Mendes
@@ -9,8 +13,13 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class DataTransferController {
+	@Autowired
+	private MediaService mediaService;
+	@Autowired
+	private ApiHandler apiHandler;
+
 	@GetMapping("dataTransfer")
-	private String getMainMenuRoot() {
-		return "index.html";
+	private String getDataTransferRoot() {
+		return "dataTransfer.html";
 	}
 }
