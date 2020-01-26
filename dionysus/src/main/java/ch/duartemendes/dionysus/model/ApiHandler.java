@@ -1,20 +1,11 @@
 package ch.duartemendes.dionysus.model;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -84,33 +75,38 @@ public class ApiHandler {
 				Movie movie = new Movie();
 				movie.setId(foundMovie.getLong("id"));
 				movie.setRuntime(foundMovie.getInt("runtime"));
-				
+
 				JSONArray foundGenres = foundMovie.getJSONArray("genres");
 				ArrayList<String> genres = new ArrayList<>();
 				for (int i = 0; i < foundGenres.length(); i++) {
 					JSONObject foundGenre = foundGenres.getJSONObject(i);
 
-					if(!genres.contains(foundGenre.getString("name"))) {
+					if (!genres.contains(foundGenre.getString("name"))) {
 						genres.add(foundGenre.getString("name"));
 					}
 				}
 				movie.setGenres(genres.toArray(new String[genres.size()]));
-				
+
 				JSONArray foundTitles = foundMovie.getJSONArray("translations");
 				ArrayList<String> titles = new ArrayList<>();
+				int count = 0;
 				for (int i = 0; i < foundTitles.length(); i++) {
 					JSONObject foundTitle = foundTitles.getJSONObject(i);
-					
-					if(foundTitle.getString("language_code").equals("eng")) {
+
+					if (foundTitle.getString("language_code").equals("eng")) {
 						movie.setTitle(foundTitle.getString("name"));
 						movie.setOverview(foundTitle.getString("overview"));
+					} else {
+						count++;
 					}
-					
-					titles.add(foundTitle.getString("name") + " (" + foundTitle.getString("language_code") + ")");
+
+					if (count < 8) {
+						titles.add(foundTitle.getString("name") + " (" + foundTitle.getString("language_code") + ")");
+					}
 				}
-		
+
 				movie.setAlternateTitles(titles.toArray(new String[titles.size()]));
-				
+
 				JSONArray foundReleaseDates = foundMovie.getJSONArray("release_dates");
 				ArrayList<String> dates = new ArrayList<>();
 				for (int i = 0; i < foundReleaseDates.length(); i++) {
@@ -118,7 +114,6 @@ public class ApiHandler {
 					dates.add(foundDate.getString("country") + " - " + foundDate.getString("date"));
 				}
 				movie.setReleaseDate(dates.toArray(new String[dates.size()]));
-				
 
 				JSONArray foundImages = foundMovie.getJSONArray("artworks");
 				boolean firstPoster = true;
@@ -127,11 +122,11 @@ public class ApiHandler {
 				for (int i = 0; i < foundImages.length(); i++) {
 					JSONObject foundImage = foundImages.getJSONObject(i);
 
-					if(firstPoster && foundImage.getString("artwork_type").equals("Poster")) {
+					if (firstPoster && foundImage.getString("artwork_type").equals("Poster")) {
 						movie.setImage(IMAGEURL + foundImage.getString("url"));
 						movie.setPoster(IMAGEURL + foundImage.getString("url"));
 						firstPoster = false;
-					} else if(firstBanner && foundImage.getString("artwork_type").equals("Background")) {
+					} else if (firstBanner && foundImage.getString("artwork_type").equals("Background")) {
 						movie.setBanner(IMAGEURL + foundImage.getString("url"));
 						firstBanner = false;
 					} else if (firstFanart) {
@@ -190,33 +185,38 @@ public class ApiHandler {
 			Movie movie = new Movie();
 			movie.setId(foundMovie.getLong("id"));
 			movie.setRuntime(foundMovie.getInt("runtime"));
-			
+
 			JSONArray foundGenres = foundMovie.getJSONArray("genres");
 			ArrayList<String> genres = new ArrayList<>();
 			for (int i = 0; i < foundGenres.length(); i++) {
 				JSONObject foundGenre = foundGenres.getJSONObject(i);
 
-				if(!genres.contains(foundGenre.getString("name"))) {
+				if (!genres.contains(foundGenre.getString("name"))) {
 					genres.add(foundGenre.getString("name"));
 				}
 			}
 			movie.setGenres(genres.toArray(new String[genres.size()]));
-			
+
 			JSONArray foundTitles = foundMovie.getJSONArray("translations");
 			ArrayList<String> titles = new ArrayList<>();
+			int count = 0;
 			for (int i = 0; i < foundTitles.length(); i++) {
 				JSONObject foundTitle = foundTitles.getJSONObject(i);
-				
-				if(foundTitle.getString("language_code").equals("eng")) {
+
+				if (foundTitle.getString("language_code").equals("eng")) {
 					movie.setTitle(foundTitle.getString("name"));
 					movie.setOverview(foundTitle.getString("overview"));
+				} else {
+					count++;
 				}
-				
-				titles.add(foundTitle.getString("name") + " (" + foundTitle.getString("language_code") + ")");
+
+				if (count < 8) {
+					titles.add(foundTitle.getString("name") + " (" + foundTitle.getString("language_code") + ")");
+				}
 			}
-	
+
 			movie.setAlternateTitles(titles.toArray(new String[titles.size()]));
-			
+
 			JSONArray foundReleaseDates = foundMovie.getJSONArray("release_dates");
 			ArrayList<String> dates = new ArrayList<>();
 			for (int i = 0; i < foundReleaseDates.length(); i++) {
@@ -224,7 +224,6 @@ public class ApiHandler {
 				dates.add(foundDate.getString("country") + " - " + foundDate.getString("date"));
 			}
 			movie.setReleaseDate(dates.toArray(new String[dates.size()]));
-			
 
 			JSONArray foundImages = foundMovie.getJSONArray("artworks");
 			boolean firstPoster = true;
@@ -233,15 +232,14 @@ public class ApiHandler {
 			for (int i = 0; i < foundImages.length(); i++) {
 				JSONObject foundImage = foundImages.getJSONObject(i);
 
-				if(firstPoster && foundImage.getString("artwork_type").equals("Poster")) {
+				if (firstPoster && foundImage.getString("artwork_type").equals("Poster")) {
 					movie.setImage(IMAGEURL + foundImage.getString("url"));
 					movie.setPoster(IMAGEURL + foundImage.getString("url"));
 					firstPoster = false;
-				} else if(firstBanner && foundImage.getString("artwork_type").equals("Background")) {
+				} else if (firstBanner && foundImage.getString("artwork_type").equals("Background")) {
 					movie.setBanner(IMAGEURL + foundImage.getString("url"));
 					firstBanner = false;
-				} else if (firstFanart  
-						&& !foundImage.getString("artwork_type").equals("Background")
+				} else if (firstFanart && !foundImage.getString("artwork_type").equals("Background")
 						&& !foundImage.getString("artwork_type").equals("Poster")) {
 					movie.setFanart(IMAGEURL + foundImage.getString("url"));
 					firstFanart = false;
@@ -288,7 +286,7 @@ public class ApiHandler {
 			try {
 				String url = MOVIESEARCHURL;
 				String sendJson = MOVIEJSONSTART + title + MOVIEJSONEND;
-				
+
 				RestTemplate rt = new RestTemplate();
 				HttpHeaders headers = new HttpHeaders();
 
@@ -300,14 +298,14 @@ public class ApiHandler {
 				HttpEntity<String> entity = new HttpEntity<String>(sendJson, headers);
 				ResponseEntity<String> res = rt.exchange(url, HttpMethod.POST, entity, String.class);
 				String resultJson = res.getBody();
-				
+
 				JSONObject jsonObj = new JSONObject(resultJson);
 				JSONArray foundMedias = ((JSONObject) jsonObj.getJSONArray("results").get(0)).getJSONArray("hits");
-				
+
 				for (int i = 0; i < foundMedias.length(); i++) {
 					JSONObject foundMedia = foundMedias.getJSONObject(i);
 
-					if(foundMedia.getString("type").equals("Movie")) {
+					if (foundMedia.getString("type").equals("Movie")) {
 						Movie movie = new Movie();
 						movie.setImage(foundMedia.getString("image"));
 						movie.setTitle(foundMedia.getString("name"));
