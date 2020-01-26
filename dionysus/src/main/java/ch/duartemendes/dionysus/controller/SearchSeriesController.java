@@ -14,6 +14,7 @@ import ch.duartemendes.dionysus.model.ApiHandler;
 import ch.duartemendes.dionysus.model.Media;
 import ch.duartemendes.dionysus.model.MediaService;
 import ch.duartemendes.dionysus.model.MediaType;
+import ch.duartemendes.dionysus.model.Movie;
 import ch.duartemendes.dionysus.model.SearchMediaContext;
 import ch.duartemendes.dionysus.model.Serie;
 
@@ -33,8 +34,6 @@ public class SearchSeriesController {
 
 	@GetMapping("searchMedia")
 	private String getSearchSeriesMenu(Model model) {
-		mediaService.fillMediaFromDB();
-		
 		if(searchContext != null) {
 			searchContext.setStoredMedia(mediaService.getMediaList());
 		}
@@ -56,8 +55,12 @@ public class SearchSeriesController {
 			Media foundMedia = apiHandler.openMedia(searchContext);
 			mediaService.addMedia(foundMedia);
 			return openMedia(foundMedia.getApiId(), model);
-		} else {
+		} else if (searchContext.getSearchType() != null 
+				&& searchContext.getSearchTitle() != null 
+				&& !searchContext.getSearchTitle().isEmpty()) {
 			foundResults = apiHandler.searchMedia(searchContext);
+			return getSearchSeriesMenu(model);
+		} else {
 			return getSearchSeriesMenu(model);
 		}
 	}
@@ -68,8 +71,8 @@ public class SearchSeriesController {
 		mediaService.addMedia(foundMedia);
 		
 		if(MediaType.Movie.equals(foundMedia.getType())) {
-			// TODO Impl this
-			return "";
+			model.addAttribute("movie", (Movie) foundMedia);
+			return "showMovie.html";
 		} else if(MediaType.Serie.equals(foundMedia.getType())) {
 			model.addAttribute("serie", (Serie) foundMedia);
 			return "showSerie.html";

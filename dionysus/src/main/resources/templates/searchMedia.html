@@ -51,7 +51,7 @@
 					<div class="col-sm-4">
 						<select class="form-control" th:field="*{searchType}"
 							id="mediaType">
-							<option value="null">Select a MediaType</option>
+							<option th:value=null>Select a MediaType</option>
 							<option th:each="type : *{mediaTypes}" th:value="${type}"
 								th:text="${type}"></option>
 						</select>

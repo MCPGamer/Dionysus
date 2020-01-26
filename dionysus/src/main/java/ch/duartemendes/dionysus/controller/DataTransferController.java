@@ -19,8 +19,6 @@ import ch.duartemendes.dionysus.model.XMLContent;
 public class DataTransferController {
 	@Autowired
 	private MediaService mediaService;
-	@Autowired
-	private ApiHandler apiHandler;
 
 	@GetMapping("dataTransfer")
 	private String getDataTransferRoot(Model model) {

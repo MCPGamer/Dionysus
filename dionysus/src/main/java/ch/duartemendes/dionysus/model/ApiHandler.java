@@ -25,6 +25,10 @@ import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
 
+/**
+ * @author Duarte Goncalves Mendes
+ * @version 1.0
+ */
 @Service
 public class ApiHandler {
 	private static final String APIKEY = "35aeccfd8848417a5c4bc01ea35a3ba4";
@@ -154,7 +158,7 @@ public class ApiHandler {
 				}
 				rd.close();
 
-				Document doc = Jsoup.parse(result.toString());
+				Document doc = Jsoup.parse(url);
 				Elements foundMedias = doc.select(".media");
 
 				for (Element media : foundMedias) {

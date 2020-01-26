@@ -54,7 +54,7 @@ public class MediaService {
 			this.mediaList.add(persistMedia);
 		}
 	}
-
+	
 	public ArrayList<Media> getMediaList() {
 		return mediaList;
 	}
@@ -136,6 +136,8 @@ public class MediaService {
 
 	public String exportToXml() {
 		org.jdom2.Element root = new org.jdom2.Element("medias");
+		root.setAttribute("noNamespaceSchemaLocation", "dataTransfer.xsd");
+		
 		org.jdom2.Document dokument = new org.jdom2.Document(root);
 		for (Media m : mediaList) {
 			root.addContent(new org.jdom2.Element("media")
