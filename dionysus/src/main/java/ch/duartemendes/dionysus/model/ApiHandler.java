@@ -60,7 +60,7 @@ public class ApiHandler {
 
 			checkConnection();
 
-			if (MediaType.Serie.equals(MediaType.Serie)) {
+			if (MediaType.Serie.equals(searchType)) {
 				String url = BASEURL + "/series/" + searchMedia.getApiId();
 				String json = request(url, true);
 
@@ -74,7 +74,7 @@ public class ApiHandler {
 				result.setApiId(((Serie) result).getId());
 				result.setTitle(((Serie) result).getSeriesName());
 				result.setType(MediaType.Serie);
-			} else if (MediaType.Movie.equals(MediaType.Movie)) {
+			} else if (MediaType.Movie.equals(searchType)) {
 				String url = BASEURL + "/movies/" + searchMedia.getApiId();
 				String json = request(url, true);
 
@@ -94,7 +94,7 @@ public class ApiHandler {
 						genres.add(foundGenre.getString("name"));
 					}
 				}
-				movie.setGenres((String[]) genres.toArray());
+				movie.setGenres(genres.toArray(new String[genres.size()]));
 				
 				JSONArray foundTitles = foundMovie.getJSONArray("translations");
 				ArrayList<String> titles = new ArrayList<>();
@@ -109,7 +109,7 @@ public class ApiHandler {
 					titles.add(foundTitle.getString("name") + " (" + foundTitle.getString("language_code") + ")");
 				}
 		
-				movie.setReleaseDate((String[]) titles.toArray());
+				movie.setAlternateTitles(titles.toArray(new String[titles.size()]));
 				
 				JSONArray foundReleaseDates = foundMovie.getJSONArray("release_dates");
 				ArrayList<String> dates = new ArrayList<>();
@@ -117,7 +117,7 @@ public class ApiHandler {
 					JSONObject foundDate = foundReleaseDates.getJSONObject(i);
 					dates.add(foundDate.getString("country") + " - " + foundDate.getString("date"));
 				}
-				movie.setReleaseDate((String[]) dates.toArray());
+				movie.setReleaseDate(dates.toArray(new String[dates.size()]));
 				
 
 				JSONArray foundImages = foundMovie.getJSONArray("artworks");
@@ -215,7 +215,7 @@ public class ApiHandler {
 				titles.add(foundTitle.getString("name") + " (" + foundTitle.getString("language_code") + ")");
 			}
 	
-			movie.setReleaseDate(titles.toArray(new String[titles.size()]));
+			movie.setAlternateTitles(titles.toArray(new String[titles.size()]));
 			
 			JSONArray foundReleaseDates = foundMovie.getJSONArray("release_dates");
 			ArrayList<String> dates = new ArrayList<>();

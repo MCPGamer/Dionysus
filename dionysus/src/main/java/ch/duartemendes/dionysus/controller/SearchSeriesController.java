@@ -55,7 +55,7 @@ public class SearchSeriesController {
 		if (searchContext.getSelectedMedia() != 0) {
 			Media foundMedia = apiHandler.openMedia(searchContext);
 			mediaService.addMedia(foundMedia);
-			return openMedia(foundMedia.getApiId(), model);
+			return openMedia(foundMedia.getApiId(), model, foundMedia.getType());
 		} else if (searchContext.getSearchType() != null 
 				&& searchContext.getSearchTitle() != null 
 				&& !searchContext.getSearchTitle().isEmpty()) {
@@ -67,12 +67,17 @@ public class SearchSeriesController {
 	}
 	
 	@GetMapping("openMedia")
-	public String openMedia(@RequestParam long id, Model model) {
+	public String openMedia(@RequestParam long id, Model model, MediaType...inputType) {
+		MediaType type = null;
 		if(searchContext == null) {
 			return getSearchSeriesMenu(model);			
+		} else if (inputType != null && inputType.length != 0) {
+			type = inputType[0];
+		} else {
+			type = searchContext.getSearchType();
 		}
 		
-		Media foundMedia = apiHandler.openMedia(id, searchContext.getSearchType());
+		Media foundMedia = apiHandler.openMedia(id, type);
 		mediaService.addMedia(foundMedia);
 		
 		if(MediaType.Movie.equals(foundMedia.getType())) {
