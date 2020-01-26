@@ -26,7 +26,7 @@
 	</nav>
 	<!--/.Navbar-->
 	<img th:src="${movie.banner}" class="media-info__banner"/>
-	<div th:object="${movie}" class="media-info__wrapper">
+	<div th:object="${movie}" class="media-info__wrapper" id="movie-wrapper">
 		<div>
 			<label>Name</label>
 			<hr>
@@ -36,7 +36,6 @@
 				</div>
 			</div>
 		</div>
-		<div>
 		<div>
 			<label>Runtime</label>
 			<hr/>

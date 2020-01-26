@@ -133,11 +133,15 @@ and open the template in the editor.
 	padding: 20px;
 }
 
-.media-info__wrapper > div:nth-child(4) > div > div > div::after {
+.media-info__wrapper:not(#movie-wrapper) > div:nth-child(4) > div > div > div::after {
 	content: " min / episode";
 }
 
-.media-info__wrapper > div:nth-child(5) > div > div > div::after {
+.media-info__wrapper:not(#series-wrapper) > div:nth-child(2) > div > div > div::after {
+	content: " minutes";
+}
+
+.media-info__wrapper:not(#movie-wrapper) > div:nth-child(5) > div > div > div::after {
 	content: " / 10";
 }
 
