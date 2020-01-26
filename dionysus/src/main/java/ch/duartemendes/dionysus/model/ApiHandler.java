@@ -36,7 +36,9 @@ public class ApiHandler {
 	private static final String USERNAME = "MCPGamer";
 	private static final String BASEURL = "https://api.thetvdb.com";
 	private static final String IMAGEURL = "https://artworks.thetvdb.com";
-	private static final String MOVIESEARCHURL = "https://thetvdb.com/search?menu[type]=Movie&query=";
+	private static final String MOVIESEARCHURL = "https://tvshowtime-1.algolianet.com/1/indexes/*/queries?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%20(lite)%203.32.0%3Binstantsearch.js%20(3.5.3)%3BJS%20Helper%20(2.28.0)&x-algolia-application-id=tvshowtime&x-algolia-api-key=c9d5ec1316cec12f093754c69dd879d3";
+	private static final String MOVIEJSONSTART = "{\"requests\":[{\"indexName\":\"TVDB\",\"params\":\"query=";
+	private static final String MOVIEJSONEND = "&maxValuesPerFacet=10&page=0&highlightPreTag=ais-highlight&highlightPostTag=%2Fais-highlight&facets=%5B%22type%22%2C%22type%22%5D&tagFilters=\"}]}";
 	private String token;
 
 	@Autowired
@@ -111,7 +113,40 @@ public class ApiHandler {
 				((Serie) result).setPoster(IMAGEURL + "/banners/" + ((Serie) result).getPoster());
 			}
 		} else if (MediaType.Movie.equals(MediaType.Movie)) {
-			// TODO Search results for Movie
+			String url = BASEURL + "/movies/" + id;
+			String json = request(url, true);
+
+			JSONObject jsonObj = new JSONObject(json);
+			JSONObject foundMovie = jsonObj.getJSONObject("data");
+
+			Movie movie = new Movie();
+			movie.setId(foundMovie.getLong("id"));
+			movie.setRuntime(foundMovie.getInt("runtime"));
+			
+			JSONArray foundGenres = foundMovie.getJSONArray("genres");
+			ArrayList<String> genres = new ArrayList<>();
+			for (int i = 0; i < foundGenres.length(); i++) {
+				JSONObject foundGenre = foundGenres.getJSONObject(i);
+
+				if(!genres.contains(foundGenre.getString("name"))) {
+					genres.add(foundGenre.getString("name"));
+				}
+			}
+			movie.setGenres((String[]) genres.toArray());
+			
+//			movie.setTitle(foundMovie.getString("id"));
+//			movie.setReleaseDate();
+//			movie.setPoster(poster);
+//			movie.setBanner(banner);
+//			movie.setFanart(fanart);
+//			movie.setImage(image);
+//			movie.setSlug(slug);
+//			movie.setAlternateTitles(alternateTitles);
+			
+			result = movie;
+			result.setApiId(movie.getId());
+			result.setTitle(movie.getTitle());
+			result.setType(MediaType.Movie);
 		}
 
 		return result;
@@ -146,35 +181,34 @@ public class ApiHandler {
 			}
 		} else if (MediaType.Movie.equals(type)) {
 			try {
-				String url = MOVIESEARCHURL + title;
-				StringBuilder result = new StringBuilder();
-				URL url2 = new URL(url);
-				HttpURLConnection conn = (HttpURLConnection) url2.openConnection();
-				conn.setRequestMethod("GET");
-				BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-				String line;
-				while ((line = rd.readLine()) != null) {
-					result.append(line);
-				}
-				rd.close();
+				String url = MOVIESEARCHURL;
+				String sendJson = MOVIEJSONSTART + title + MOVIEJSONEND;
+				
+				RestTemplate rt = new RestTemplate();
+				HttpHeaders headers = new HttpHeaders();
 
-				Document doc = Jsoup.parse(url);
-				Elements foundMedias = doc.select(".media");
+				headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
+				headers.setAccept(Arrays.asList(org.springframework.http.MediaType.APPLICATION_JSON));
+				headers.add("user-agent",
+						"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
 
-				for (Element media : foundMedias) {
-					Movie movie = new Movie();
+				HttpEntity<String> entity = new HttpEntity<String>(sendJson, headers);
+				ResponseEntity<String> res = rt.exchange(url, HttpMethod.POST, entity, String.class);
+				String resultJson = res.getBody();
+				
+				JSONObject jsonObj = new JSONObject(resultJson);
+				JSONArray foundMedias = ((JSONObject) jsonObj.getJSONArray("results").get(0)).getJSONArray("hits");
+				
+				for (int i = 0; i < foundMedias.length(); i++) {
+					JSONObject foundMedia = foundMedias.getJSONObject(i);
 
-					Element imageDiv = media.selectFirst(".media-object");
-					movie.setImage(imageDiv.attr("src"));
-
-					Element titleDiv = media.selectFirst(".media-heading");
-					movie.setTitle(titleDiv.text());
-
-					Element idDiv = media.selectFirst(".media-body").selectFirst(".text-muted");
-					String parseId = idDiv.text();
-					movie.setId(Long.valueOf(parseId.substring(parseId.indexOf('#'), parseId.length())));
-
-					results.add(movie);
+					if(foundMedia.getString("type").equals("Movie")) {
+						Movie movie = new Movie();
+						movie.setImage(foundMedia.getString("image"));
+						movie.setTitle(foundMedia.getString("name"));
+						movie.setId(foundMedia.getLong("id"));
+						results.add(movie);
+					}
 				}
 			} catch (Exception e) {
 			}

@@ -28,7 +28,7 @@ public class DataTransferController {
 
 	@PostMapping("xmlUpload")
 	private String uploadXML(@ModelAttribute XMLContent xmlContent, Model model) {
-		if (xmlContent.getXml().contains("noNamespaceSchemaLocation=\"DataTransfer.xsd\"")) {
+		if (xmlContent.getXml().contains("noNamespaceSchemaLocation=\"dataTransfer.xsd\"")) {
 			mediaService.importFromXml(xmlContent.getXml());
 			return "redirect:/";
 		} else {

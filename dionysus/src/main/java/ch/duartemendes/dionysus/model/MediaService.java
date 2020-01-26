@@ -99,7 +99,7 @@ public class MediaService {
 		for (int i = 0; i < mediaList.getLength(); i++) {
 			Media media = new Media();
 			Element elem = (Element) mediaList.item(i);
-			media.setApiId(Integer.parseInt(getValueOfSingleChild(elem, "idDb")));
+			media.setApiId(Integer.parseInt(getValueOfSingleChild(elem, "apiId")));
 			media.setTitle(getValueOfSingleChild(elem, "title"));
 			media.setType(MediaType.lookupByName(getValueOfSingleChild(elem, "type")));
 			medias.add(media);
@@ -118,7 +118,7 @@ public class MediaService {
 			}
 		}
 
-		for (Media m : medias) {
+		for (Media m : mediasToAdd) {
 			addMedia(m);
 		}
 	}
