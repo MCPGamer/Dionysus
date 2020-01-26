@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dionysus</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/style.css" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body class="bg-4">
+	<!--Navbar-->
+	<nav class="navbar navbar-expand-lg navbar-inverse">
+		<div class="navbar-header">Dionysus</div>
+		<div>
+			<ul class="nav navbar-nav mr-auto">
+				<li class="nav-item active"><a class="nav-link"
+					href="/searchMedia">Search Series or Movie</a></li>
+				<li class="nav-item "><a class="nav-link"
+					href="/dataTransfer">Export or Import XML</a></li>
+			</ul>
+		</div>
+	</nav>
+	<!--/.Navbar-->
+	<img th:src="${movie.banner}" class="media-info__banner"/>
+	<div th:object="${movie}" class="media-info__wrapper">
+		<div>
+			<label>Name</label>
+			<hr>
+			<div>
+				<div>
+					<div th:text="*{title}"></div>
+				</div>
+			</div>
+		</div>
+		<div>
+		<div>
+			<label>Runtime</label>
+			<hr/>
+			<div>
+				<div>
+					<div th:text="*{runtime}"></div>
+				</div>
+			</div>
+		</div>
+		<div>
+			<label>Released</label>
+			<hr/>
+			<div>
+				<div th:each="date : *{releaseDate}">
+					<div th:text="${date}"></div>
+				</div>
+			</div>
+		</div>
+		<div>
+			<label>Aliases</label>
+			<hr/>
+			<div>
+				<div th:each="alias : *{alternateTitles}">
+					<div th:text="${alias}"></div>
+				</div>
+			</div>
+		</div>
+		<div>
+			<label>Genres</label>
+			<hr/>
+			<div>
+				<div th:each="gen : *{genres}">
+					<div th:text="${gen}"></div>
+				</div>
+			</div>
+		</div>
+		<div>
+			<label>Overview</label>
+			<hr/>
+			<div>
+				<div>
+					<div th:text="*{overview}"></div>
+				</div>
+			</div>
+		</div>
+		<img th:src="${movie.fanart}" class="media-info__banner"/>
+	</div>
+	<footer class="container-fluid bg-4 text-center">
+		<p>&copy; Duarte Mendes</p>
+	</footer>
+</body>
+</html>

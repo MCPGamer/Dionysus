@@ -75,7 +75,75 @@ public class ApiHandler {
 				result.setTitle(((Serie) result).getSeriesName());
 				result.setType(MediaType.Serie);
 			} else if (MediaType.Movie.equals(MediaType.Movie)) {
-				// TODO Search results for Movie
+				String url = BASEURL + "/movies/" + searchMedia.getApiId();
+				String json = request(url, true);
+
+				JSONObject jsonObj = new JSONObject(json);
+				JSONObject foundMovie = jsonObj.getJSONObject("data");
+
+				Movie movie = new Movie();
+				movie.setId(foundMovie.getLong("id"));
+				movie.setRuntime(foundMovie.getInt("runtime"));
+				
+				JSONArray foundGenres = foundMovie.getJSONArray("genres");
+				ArrayList<String> genres = new ArrayList<>();
+				for (int i = 0; i < foundGenres.length(); i++) {
+					JSONObject foundGenre = foundGenres.getJSONObject(i);
+
+					if(!genres.contains(foundGenre.getString("name"))) {
+						genres.add(foundGenre.getString("name"));
+					}
+				}
+				movie.setGenres((String[]) genres.toArray());
+				
+				JSONArray foundTitles = foundMovie.getJSONArray("translations");
+				ArrayList<String> titles = new ArrayList<>();
+				for (int i = 0; i < foundTitles.length(); i++) {
+					JSONObject foundTitle = foundTitles.getJSONObject(i);
+					
+					if(foundTitle.getString("language_code").equals("eng")) {
+						movie.setTitle(foundTitle.getString("name"));
+						movie.setOverview(foundTitle.getString("overview"));
+					}
+					
+					titles.add(foundTitle.getString("name") + " (" + foundTitle.getString("language_code") + ")");
+				}
+		
+				movie.setReleaseDate((String[]) titles.toArray());
+				
+				JSONArray foundReleaseDates = foundMovie.getJSONArray("release_dates");
+				ArrayList<String> dates = new ArrayList<>();
+				for (int i = 0; i < foundReleaseDates.length(); i++) {
+					JSONObject foundDate = foundReleaseDates.getJSONObject(i);
+					dates.add(foundDate.getString("country") + " - " + foundDate.getString("date"));
+				}
+				movie.setReleaseDate((String[]) dates.toArray());
+				
+
+				JSONArray foundImages = foundMovie.getJSONArray("artworks");
+				boolean firstPoster = true;
+				boolean firstBanner = true;
+				boolean firstFanart = true;
+				for (int i = 0; i < foundImages.length(); i++) {
+					JSONObject foundImage = foundImages.getJSONObject(i);
+
+					if(firstPoster && foundImage.getString("artwork_type").equals("Poster")) {
+						movie.setImage(IMAGEURL + foundImage.getString("url"));
+						movie.setPoster(IMAGEURL + foundImage.getString("url"));
+						firstPoster = false;
+					} else if(firstBanner && foundImage.getString("artwork_type").equals("Background")) {
+						movie.setBanner(IMAGEURL + foundImage.getString("url"));
+						firstBanner = false;
+					} else if (firstFanart) {
+						movie.setFanart(IMAGEURL + foundImage.getString("url"));
+						firstFanart = false;
+					}
+				}
+
+				result = movie;
+				result.setApiId(movie.getId());
+				result.setTitle(movie.getTitle());
+				result.setType(MediaType.Movie);
 			}
 		}
 
@@ -83,12 +151,12 @@ public class ApiHandler {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Media openMedia(long id) {
+	public Media openMedia(long id, MediaType type) {
 		Media result = null;
 
 		checkConnection();
 
-		if (MediaType.Serie.equals(MediaType.Serie)) {
+		if (MediaType.Serie.equals(type)) {
 			String url = BASEURL + "/series/" + id;
 			String json = request(url, true);
 
@@ -112,7 +180,7 @@ public class ApiHandler {
 			if (((Serie) result).getPoster() != null && !((Serie) result).getPoster().isEmpty()) {
 				((Serie) result).setPoster(IMAGEURL + "/banners/" + ((Serie) result).getPoster());
 			}
-		} else if (MediaType.Movie.equals(MediaType.Movie)) {
+		} else if (MediaType.Movie.equals(type)) {
 			String url = BASEURL + "/movies/" + id;
 			String json = request(url, true);
 
@@ -132,17 +200,54 @@ public class ApiHandler {
 					genres.add(foundGenre.getString("name"));
 				}
 			}
-			movie.setGenres((String[]) genres.toArray());
+			movie.setGenres(genres.toArray(new String[genres.size()]));
 			
-//			movie.setTitle(foundMovie.getString("id"));
-//			movie.setReleaseDate();
-//			movie.setPoster(poster);
-//			movie.setBanner(banner);
-//			movie.setFanart(fanart);
-//			movie.setImage(image);
-//			movie.setSlug(slug);
-//			movie.setAlternateTitles(alternateTitles);
+			JSONArray foundTitles = foundMovie.getJSONArray("translations");
+			ArrayList<String> titles = new ArrayList<>();
+			for (int i = 0; i < foundTitles.length(); i++) {
+				JSONObject foundTitle = foundTitles.getJSONObject(i);
+				
+				if(foundTitle.getString("language_code").equals("eng")) {
+					movie.setTitle(foundTitle.getString("name"));
+					movie.setOverview(foundTitle.getString("overview"));
+				}
+				
+				titles.add(foundTitle.getString("name") + " (" + foundTitle.getString("language_code") + ")");
+			}
+	
+			movie.setReleaseDate(titles.toArray(new String[titles.size()]));
 			
+			JSONArray foundReleaseDates = foundMovie.getJSONArray("release_dates");
+			ArrayList<String> dates = new ArrayList<>();
+			for (int i = 0; i < foundReleaseDates.length(); i++) {
+				JSONObject foundDate = foundReleaseDates.getJSONObject(i);
+				dates.add(foundDate.getString("country") + " - " + foundDate.getString("date"));
+			}
+			movie.setReleaseDate(dates.toArray(new String[dates.size()]));
+			
+
+			JSONArray foundImages = foundMovie.getJSONArray("artworks");
+			boolean firstPoster = true;
+			boolean firstBanner = true;
+			boolean firstFanart = true;
+			for (int i = 0; i < foundImages.length(); i++) {
+				JSONObject foundImage = foundImages.getJSONObject(i);
+
+				if(firstPoster && foundImage.getString("artwork_type").equals("Poster")) {
+					movie.setImage(IMAGEURL + foundImage.getString("url"));
+					movie.setPoster(IMAGEURL + foundImage.getString("url"));
+					firstPoster = false;
+				} else if(firstBanner && foundImage.getString("artwork_type").equals("Background")) {
+					movie.setBanner(IMAGEURL + foundImage.getString("url"));
+					firstBanner = false;
+				} else if (firstFanart  
+						&& !foundImage.getString("artwork_type").equals("Background")
+						&& !foundImage.getString("artwork_type").equals("Poster")) {
+					movie.setFanart(IMAGEURL + foundImage.getString("url"));
+					firstFanart = false;
+				}
+			}
+
 			result = movie;
 			result.setApiId(movie.getId());
 			result.setTitle(movie.getTitle());

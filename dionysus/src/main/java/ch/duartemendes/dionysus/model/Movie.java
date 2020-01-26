@@ -14,7 +14,7 @@ public class Movie extends Media {
 	private String banner;
 	private String fanart;
 	private String image;
-	private String slug;
+	private String overview;
 	private String[] alternateTitles;
 
 	public long getId() {
@@ -89,12 +89,12 @@ public class Movie extends Media {
 		this.image = image;
 	}
 
-	public String getSlug() {
-		return slug;
+	public String getOverview() {
+		return overview;
 	}
 
-	public void setSlug(String slug) {
-		this.slug = slug;
+	public void setOverview(String overview) {
+		this.overview = overview;
 	}
 
 	public String[] getAlternateTitles() {

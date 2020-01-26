@@ -68,7 +68,11 @@ public class SearchSeriesController {
 	
 	@GetMapping("openMedia")
 	public String openMedia(@RequestParam long id, Model model) {
-		Media foundMedia = apiHandler.openMedia(id);
+		if(searchContext == null) {
+			return getSearchSeriesMenu(model);			
+		}
+		
+		Media foundMedia = apiHandler.openMedia(id, searchContext.getSearchType());
 		mediaService.addMedia(foundMedia);
 		
 		if(MediaType.Movie.equals(foundMedia.getType())) {
