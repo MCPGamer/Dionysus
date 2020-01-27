@@ -57,3 +57,4 @@ dionysus/.vscode/
 /dionysus/mvnw
 /dionysus/*.cmd
 /Dokumentation_Dionysus.pdf
+/Dionysus_dump.sql
