@@ -136,7 +136,7 @@ public class MediaService {
 
 	public String exportToXml() {
 		org.jdom2.Element root = new org.jdom2.Element("medias");
-		root.setAttribute("noNamespaceSchemaLocation", "dataTransfer.xsd");
+		root.setAttribute("noNamespaceSchemaLocation", "DataTransfer.xsd");
 		
 		org.jdom2.Document dokument = new org.jdom2.Document(root);
 		for (Media m : mediaList) {

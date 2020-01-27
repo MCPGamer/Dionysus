@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import ch.duartemendes.dionysus.model.ApiHandler;
 import ch.duartemendes.dionysus.model.MediaService;
 import ch.duartemendes.dionysus.model.XMLContent;
 
@@ -28,7 +27,7 @@ public class DataTransferController {
 
 	@PostMapping("xmlUpload")
 	private String uploadXML(@ModelAttribute XMLContent xmlContent, Model model) {
-		if (xmlContent.getXml().contains("noNamespaceSchemaLocation=\"dataTransfer.xsd\"")) {
+		if (xmlContent.getXml().contains("noNamespaceSchemaLocation=\"DataTransfer.xsd\"")) {
 			mediaService.importFromXml(xmlContent.getXml());
 			return "redirect:/";
 		} else {
