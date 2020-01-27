@@ -58,3 +58,6 @@ dionysus/.vscode/
 /dionysus/*.cmd
 /Dokumentation_Dionysus.pdf
 /Dionysus_dump.sql
+/Beispiel_JSON_suche.json
+/Beispiel_JSON_medium.json
+/Beispiel_XML.xml
